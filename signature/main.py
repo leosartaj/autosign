@@ -1,5 +1,5 @@
 import os
-from constants import __sigstart__, __sigend__
+import constants
 
 def getPath(dire, fName):
     """
@@ -18,11 +18,17 @@ def getIndex(dire, fName):
 
     start, end = None, None
     for index, line in enumerate(handler):
-        if line[:2] == __sigstart__ and start == None:
+        if line[:2] == constants.__sigstart__ and start == None:
             start = index
-        elif line[:2] == __sigend__ and end == None:
+        elif line[:2] == constants.__sigend__ and end == None:
             end = index
-    return start, end
+            break
+        elif line[0] != constants.__sigline__ and start != None:
+            start, end = None, None
+            break
+    if start != None and end != None:
+        return start, end
+    return None, None
 
 def isSign(dire, fName):
     """
