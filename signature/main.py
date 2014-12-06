@@ -84,3 +84,21 @@ def sign(signFile, fName, force=False):
                         i += 1
                 else:
                     handler.write(line)
+
+def removeSign(fName):
+    """
+    Removes sign from a signed file
+    raises UnsignedError if file not signed
+    """
+    if not isSign(fName):
+        raise exceptions.UnsignedError("File not signed")
+
+    with open(fName, 'r') as handler:
+        lines = handler.readlines()
+
+    start, end = getIndex(fName)
+    with open(fName, 'w') as handler:
+        for index in range(len(lines)):
+            if index < start or index > end:
+                handler.write(lines[index])
+
