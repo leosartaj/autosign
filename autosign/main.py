@@ -41,14 +41,21 @@ def checkTemplate(fName):
     checks if the file
     is a proper template or not
     file should only contain a single signature
-    no extra lines are allowed
+    before the signature line startin with #! is allowed
+    extra lines are allowe before or after signature
     """
     start, end = getIndex(fName)
     if start == None or end == None:
         return False
     handler = open(fName, 'r')
     lines = handler.readlines()
-    if len(lines) - 1 == end - start:
+    add = 0
+    for index, line in enumerate(lines):
+        if line[:2] == '#!' and index < start:
+            add += 1
+        elif line == os.linesep and (index < start or index > end):
+            add += 1
+    if len(lines) - 1 == end - start + add:
         return True
     return False
 
@@ -110,6 +117,10 @@ def signFiles(signfile, fName, recursive=False, force=False):
 def removeSign(fName):
     """
     Removes sign from a signed file
+    does not remove extra lines that were added 
+    after the signature when the file was signed
+    removes line starting with a shebange that
+    may or may not have been added by the signature
     raises UnsignedError if file not signed
     """
     if not isSign(fName):
@@ -121,6 +132,10 @@ def removeSign(fName):
     start, end = getIndex(fName)
     with open(fName, 'w') as handler:
         for index in range(len(lines)):
+            if lines[index][:2] == '#!' and index < start:
+                continue
+            if lines[index] == os.linesep and index < start:
+                continue
             if index < start or index > end:
                 handler.write(lines[index])
 
