@@ -1,5 +1,6 @@
 import unittest
 import os, shutil
+import helper
 from signature.main import sign, isSign
 from signature.exceptions import TemplateError
 
@@ -19,8 +20,7 @@ class Testsign(unittest.TestCase):
         shutil.copyfile(self.toBeSigned, self.signed)
 
         self.unsigned = os.path.join(self.dire, 'testData/test_unsignedfile.py')
-        with open(self.unsigned, 'w'):
-            pass
+        helper.newFile(self.unsigned)
 
     def test_incorrect_signfile(self):
         incorrect = os.path.join(self.dire, 'testData/unsigned')

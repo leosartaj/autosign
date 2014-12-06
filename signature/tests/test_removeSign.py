@@ -1,5 +1,6 @@
 import unittest
 import os, shutil
+import helper
 from signature.main import removeSign, isSign
 from signature.exceptions import UnsignedError
 
@@ -13,8 +14,7 @@ class TestremoveSign(unittest.TestCase):
         self.signed = os.path.join(dire, 'testData/test_signedfile.py')
         shutil.copyfile(self.signedfile, self.signed)
         self.unsigned = os.path.join(dire, 'testData/test_unsignedfile.py')
-        with open(self.unsigned, 'w'):
-            pass
+        helper.newFile(self.unsigned)
 
     def test_remove_from_unsigned_file(self):
         self.assertRaises(UnsignedError, removeSign, self.unsigned)
