@@ -29,7 +29,7 @@ def parse_args():
 
     options, args = parser.parse_args()
 
-    if len(args) == 0:
-        parser.error('Not enough arguments')
+    if len(args) != 2 and len(args) != 3:
+        parser.error('Expecting 2, got ' + str(len(args)) + ' argument(s)')
 
     return options, args

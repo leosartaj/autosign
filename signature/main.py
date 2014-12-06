@@ -64,17 +64,18 @@ def sign(signFile, fName, force=False):
         sign_lines = sign.readlines()
         temp_len = len(sign_lines)
 
+    with open(fName, 'r') as handler:
+        lines = handler.readlines()
+
     if not isSign(fName):
-        with open(fName, 'a') as handler:
-            handler.seek(0, 0)
+        with open(fName, 'w') as handler:
             for line in sign_lines:
+                handler.write(line)
+            for line in lines:
                 handler.write(line)
     elif force:
         start, end = getIndex(fName)
         signed_len = end - start + 1
-
-        with open(fName, 'r') as handler:
-            lines = handler.readlines()
 
         with open(fName, 'w') as handler:
             i = 0
