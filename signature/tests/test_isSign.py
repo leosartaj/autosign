@@ -10,12 +10,12 @@ class TestisSign(unittest.TestCase):
         dire = os.path.dirname(__file__)
         path = os.path.join(dire, 'testData/signed')
         for filename in os.listdir(path):
-            print os.path.join(path, filename)
-            self.assertEqual(isSign(path, filename), True)
+            fName = os.path.join(path, filename)
+            self.assertEqual(isSign(fName), True)
 
     def test_unsigned_files(self):
         dire = os.path.dirname(__file__)
         path = os.path.join(dire, 'testData/unsigned')
         for filename in os.listdir(path):
-            print os.path.join(path, filename)
-            self.assertEqual(isSign(path, filename), False)
+            fName = os.path.join(path, filename)
+            self.assertEqual(isSign(fName), False)

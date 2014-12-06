@@ -10,8 +10,8 @@ class TestgetIndex(unittest.TestCase):
         dire = os.path.dirname(__file__)
         path = os.path.join(dire, 'testData/signed')
         for filename in os.listdir(path):
-            print os.path.join(path, filename)
-            start, end = getIndex(path, filename)
+            fName = os.path.join(path, filename)
+            start, end = getIndex(fName)
             self.assertNotEqual(start, None)
             self.assertNotEqual(end, None)
             length = end - start
@@ -21,8 +21,7 @@ class TestgetIndex(unittest.TestCase):
         dire = os.path.dirname(__file__)
         path = os.path.join(dire, 'testData/unsigned')
         for filename in os.listdir(path):
-            print os.path.join(path, filename)
-            start, end = getIndex(path, filename)
+            fName = os.path.join(path, filename)
+            start, end = getIndex(fName)
             self.assertEqual(start, None)
             self.assertEqual(end, None)
-
