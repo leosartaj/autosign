@@ -128,12 +128,12 @@ def removeSignFiles(fName, recursive=False):
     removes sign from a file
     removes signs from all the files in a directory
     """
-    if not os.path.isdir(fName) and isSign(fName):
+    if os.path.isfile(fName) and isSign(fName):
         removeSign(fName)
-    else:
+    elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
                 removeSignFiles(path, recursive)
-            elif os.path.isfile(path):
+            elif os.path.isfile(path) and isSign(path):
                 removeSign(path)
