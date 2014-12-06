@@ -8,7 +8,7 @@ Main functions
 
 def getIndex(fName):
     """
-    returns the start and end of a signature in a file
+        returns the start and end of a signature in a file
     returns None if __sigstart__ or __sigend__ not found
     """
     handler = open(fName)
@@ -84,10 +84,11 @@ def sign(signFile, fName, force=False):
                     if i < len(sign_lines):
                         handler.write(sign_lines[i])
                         i += 1
-                elif i < len(sign_lines):
-                        handler.write(sign_lines[i])
-                        i += 1
                 else:
+                    if i < len(sign_lines):
+                        for j in range(i, len(sign_lines)):
+                            handler.write(sign_lines[j])
+                        i = len(sign_lines)
                     handler.write(line)
 
 def signFiles(signfile, fName, recursive=False, force=False):

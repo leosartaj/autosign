@@ -1,7 +1,7 @@
 import unittest
 import os, shutil
 import helper
-from signature.main import signFiles, isSign
+from autosign.main import signFiles, isSign
 
 class TestsignFiles(unittest.TestCase):
     """

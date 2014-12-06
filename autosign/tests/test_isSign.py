@@ -1,6 +1,6 @@
 import unittest
 import os
-from signature.main import isSign
+from autosign.main import isSign
 
 class TestisSign(unittest.TestCase):
     """

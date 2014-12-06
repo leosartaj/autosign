@@ -1,8 +1,15 @@
+##
+# signature
+# https://github.com/leosartaj/signature.git
+# 
+# copyright (c) 2014 sartaj singh
+# licensed under the mit license.
+##
 import unittest
 import os, shutil
 import helper
-from signature.main import sign, isSign
-from signature.exceptions import TemplateError
+from autosign.main import sign, isSign
+from autosign.exceptions import TemplateError
 
 class Testsign(unittest.TestCase):
     """

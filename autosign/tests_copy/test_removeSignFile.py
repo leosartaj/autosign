@@ -1,7 +1,14 @@
+##
+# signature
+# https://github.com/leosartaj/signature.git
+# 
+# copyright (c) 2014 sartaj singh
+# licensed under the mit license.
+##
 import unittest
 import os, shutil
 import helper
-from signature.main import removeSignFiles, isSign
+from autosign.main import removeSignFiles, isSign
 
 class TestsignFiles(unittest.TestCase):
     """

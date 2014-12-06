@@ -1,6 +1,6 @@
 import unittest
 import os
-from signature.main import checkTemplate
+from autosign.main import checkTemplate
 
 class TestcheckTemplate(unittest.TestCase):
     """

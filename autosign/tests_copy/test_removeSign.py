@@ -1,8 +1,15 @@
+##
+# signature
+# https://github.com/leosartaj/signature.git
+# 
+# copyright (c) 2014 sartaj singh
+# licensed under the mit license.
+##
 import unittest
 import os, shutil
 import helper
-from signature.main import removeSign, isSign
-from signature.exceptions import UnsignedError
+from autosign.main import removeSign, isSign
+from autosign.exceptions import UnsignedError
 
 class TestremoveSign(unittest.TestCase):
     """

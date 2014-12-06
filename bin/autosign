@@ -1,0 +1,20 @@
+#! /usr/bin/env python2
+
+"""
+Main script that powers autosign
+"""
+
+import os
+from autosign import main
+from autosign import options
+
+if __name__ == '__main__':
+    args = options.parse_args()
+
+    signfile = args.signfile
+    if not os.path.isfile(signfile):
+        raise IOError('file \'%s\' does not exist.' %(signfile))
+    target= args.target
+    if not os.path.exists(target):
+        raise IOError('file/dir \'%s\' does not exist.' %(target))
+    main.signFiles(signfile, target, args.recursive, args.force)
