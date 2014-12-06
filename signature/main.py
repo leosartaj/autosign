@@ -42,9 +42,9 @@ def checkTemplate(fName):
     start, end = getIndex(fName)
     if start == None or end == None:
         return False
-    handler = open(fName)
-    lines = handler.read().split('\n')
-    if len(lines) - 2 == (end - start):
+    handler = open(fName, 'r')
+    lines = handler.readlines()
+    if len(lines) - 1 == end - start:
         return True
     return False
 
@@ -56,10 +56,31 @@ def sign(signFile, fName, force=False):
     if not checkTemplate(signFile):
         raise exceptions.TemplateError('Incorrect Template')
 
-    sign = open(signFile) # sign to be added
-    handler = open(fName, 'a')
+    with open(signFile, 'r') as sign:# sign to be added
+        sign_lines = sign.readlines()
+        temp_len = len(sign_lines)
 
     if not isSign(fName):
-        handler.seek(0, 0)
-        lines = sign.read()
-        handler.write(lines)
+        with open(fName, 'a') as handler:
+            handler.seek(0, 0)
+            for line in sign_lines:
+                handler.write(line)
+    elif force:
+        start, end = getIndex(fName)
+        signed_len = end - start + 1
+
+        with open(fName, 'r') as handler:
+            lines = handler.readlines()
+
+        with open(fName, 'w') as handler:
+            i = 0
+            for index, line in enumerate(lines):
+                if index >= start and index <= end:
+                    if i < len(sign_lines):
+                        handler.write(sign_lines[i])
+                        i += 1
+                elif i < len(sign_lines):
+                        handler.write(sign_lines[i])
+                        i += 1
+                else:
+                    handler.write(line)
