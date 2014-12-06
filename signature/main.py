@@ -2,6 +2,10 @@ import os
 import constants
 import exceptions
 
+"""
+Main functions
+"""
+
 def getIndex(fName):
     """
     returns the start and end of a signature in a file
@@ -85,6 +89,22 @@ def sign(signFile, fName, force=False):
                 else:
                     handler.write(line)
 
+def signFiles(signfile, fName, recursive=False, force=False):
+    """
+    recursive implementation of main.sign
+    signs a file
+    signs all the files in a directory
+    """
+    if not os.path.isdir(fName):
+        sign(signfile, fName, force)
+    else:
+        for filename in os.listdir(fName):
+            path = os.path.join(fName, filename)
+            if os.path.isdir(path) and recursive:
+                signFiles(signfile, path, recursive, force)
+            elif os.path.isfile(path):
+                sign(signfile, path, force)
+
 def removeSign(fName):
     """
     Removes sign from a signed file
@@ -102,3 +122,18 @@ def removeSign(fName):
             if index < start or index > end:
                 handler.write(lines[index])
 
+def removeSignFiles(fName, recursive=False):
+    """
+    recursive implementation of main.removeSign
+    removes sign from a file
+    removes signs from all the files in a directory
+    """
+    if not os.path.isdir(fName) and isSign(fName):
+        removeSign(fName)
+    else:
+        for filename in os.listdir(fName):
+            path = os.path.join(fName, filename)
+            if os.path.isdir(path) and recursive:
+                removeSignFiles(path, recursive)
+            elif os.path.isfile(path):
+                removeSign(path)
