@@ -1,6 +1,7 @@
 Autosign
 *********
 Add your signature to your **python** files.
+Use under **caution**, work in progress.
 
 Installation
 ============
@@ -36,7 +37,7 @@ Signing python files
 --------------------
 autosign can be used for signing python files
 ::
-  autosign signfiles target [options]
+  autosign signfile target [options]
 
 Run the following command, for various options.
 ::

@@ -37,21 +37,30 @@ def isSign(fName):
         return True
     return False
 
+def hasInter(fName):
+    """
+    Checks if a file starts with a #! 
+    directing to use python interpreter
+    """
+    exp = re.compile('^#!.*python.*$')
+    with open(fName, 'r') as handler:
+        lines = handler.readlines()
+        if len(lines) and exp.match(lines[0]):
+            return True
+    return False
+
 def isPy(fName):
     """
     checks if file is python or not
     checks if file has .py extension
     or checks if first line contains #!
-    and directs the use of python
+    and directs the use of python interpreter
     """
     name, ext = os.path.splitext(fName)
     if ext == '.py':
         return True
-    with open(fName, 'r') as handler:
-        exp = re.compile('^#!.*python.*$')
-        lines = handler.readlines()
-        if len(lines) and exp.match(lines[0]):
-            return True
+    elif hasInter(fName):
+        return True
 
     return False
 
@@ -61,7 +70,7 @@ def checkTemplate(fName):
     is a proper template or not
     file should only contain a single signature
     before the signature line startin with #! is allowed
-    extra lines are allowe before or after signature
+    extra lines are allowed before or after signature
     """
     start, end = getIndex(fName)
     if start == None or end == None:
@@ -86,7 +95,7 @@ def sign(signFile, fName, force=False):
     if not checkTemplate(signFile):
         raise exceptions.TemplateError('Incorrect Template')
 
-    with open(signFile, 'r') as sign:# sign to be added
+    with open(signFile, 'r') as sign: # sign to be added
         sign_lines = sign.readlines()
         temp_len = len(sign_lines)
 
