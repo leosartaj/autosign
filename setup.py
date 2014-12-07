@@ -11,9 +11,9 @@
 from autosign import __version__
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setup, find_packages
 
 def readFile(fName):
     with open(fName) as f:
@@ -30,7 +30,7 @@ setup(
     license = 'MIT',
     keywords = 'auto signature autosign',
     url = 'http://github.com/leosartaj/autosign',
-    packages=['autosign', 'autosign/info'],
+    packages=find_packages(),
     scripts=['bin/autosign'],
     classifiers=[
         'Development Status :: 3 - Alpha',
