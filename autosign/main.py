@@ -1,4 +1,5 @@
 import os
+import re
 import constants
 import exceptions
 
@@ -34,6 +35,24 @@ def isSign(fName):
     start, end = getIndex(fName)
     if start != None and end != None:
         return True
+    return False
+
+def isPy(fName):
+    """
+    checks if file is python or not
+    checks if file has .py extension
+    or checks if first line contains #!
+    and directs the use of python
+    """
+    name, ext = os.path.splitext(fName)
+    if ext == '.py':
+        return True
+    with open(fName, 'r') as handler:
+        exp = re.compile('^#!.*python.*$')
+        lines = handler.readlines()
+        if len(lines) and exp.match(lines[0]):
+            return True
+
     return False
 
 def checkTemplate(fName):
@@ -104,14 +123,14 @@ def signFiles(signfile, fName, recursive=False, force=False):
     signs a file
     signs all the files in a directory
     """
-    if not os.path.isdir(fName):
+    if os.path.isfile(fName) and isPy(fName):
         sign(signfile, fName, force)
-    else:
+    elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
                 signFiles(signfile, path, recursive, force)
-            elif os.path.isfile(path):
+            elif os.path.isfile(path) and isPy(path):
                 sign(signfile, path, force)
 
 def removeSign(fName):
@@ -142,15 +161,15 @@ def removeSign(fName):
 def removeSignFiles(fName, recursive=False):
     """
     recursive implementation of main.removeSign
-    removes sign from a file
-    removes signs from all the files in a directory
+    removes sign from a python file 
+    removes signs from all the python files in a directory
     """
-    if os.path.isfile(fName) and isSign(fName):
+    if os.path.isfile(fName) and isSign(fName) and isPy(fName):
         removeSign(fName)
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
                 removeSignFiles(path, recursive)
-            elif os.path.isfile(path) and isSign(path):
+            elif os.path.isfile(path) and isSign(path) and isPy(path):
                 removeSign(path)
