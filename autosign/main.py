@@ -37,17 +37,47 @@ def isSign(fName):
         return True
     return False
 
+def checkRe(exp, line):
+    """
+    Checks a line if it follows a regular expression or not
+    """
+    result = exp.match(line)
+    if result:
+        return True
+    return False
+
 def hasInter(fName):
     """
     Checks if a file starts with a #! 
     directing to use python interpreter
-    """
+    """ 
     exp = re.compile('^#!.*python.*$')
     with open(fName, 'r') as handler:
         lines = handler.readlines()
-        if len(lines) and exp.match(lines[0]):
+        if len(lines) and checkRe(exp, lines[0]):
             return True
     return False
+
+def removeInter(fName):
+    """
+    Checks if a file starts with a #! 
+    directing to use python interpreter
+    if it has removes and returns the line
+    else returns None
+    """
+    inter = None
+    if not hasInter(fName):
+        return inter
+    with open(fName, 'r') as handler:
+        lines = handler.readlines()
+    exp = re.compile('^#!.*python.*$')
+    with open(fName, 'w') as handler:
+        for line in lines:
+            if not checkRe(exp, line):
+                handler.write(line)
+            else:
+                inter = line
+    return inter
 
 def isPy(fName):
     """
@@ -57,9 +87,7 @@ def isPy(fName):
     and directs the use of python interpreter
     """
     name, ext = os.path.splitext(fName)
-    if ext == '.py':
-        return True
-    elif hasInter(fName):
+    if ext == '.py' or hasInter(fName):
         return True
 
     return False
@@ -79,7 +107,7 @@ def checkTemplate(fName):
     lines = handler.readlines()
     add = 0
     for index, line in enumerate(lines):
-        if line[:2] == '#!' and index < start:
+        if line[:2] == constants.__inter__ and index < start:
             add += 1
         elif line == os.linesep and (index < start or index > end):
             add += 1
@@ -99,31 +127,29 @@ def sign(signFile, fName, force=False):
         sign_lines = sign.readlines()
         temp_len = len(sign_lines)
 
-    with open(fName, 'r') as handler:
-        lines = handler.readlines()
-
     if not isSign(fName):
+        inter_f = removeInter(fName)
+        with open(fName, 'r') as handler:
+            lines = handler.readlines()
         with open(fName, 'w') as handler:
+            if inter_f != None and not hasInter(signFile):
+                handler.write(inter_f)
             for line in sign_lines:
                 handler.write(line)
             for line in lines:
                 handler.write(line)
     elif force:
+        inter_f = removeInter(fName)
         start, end = getIndex(fName)
-        signed_len = end - start + 1
-
+        with open(fName, 'r') as handler:
+            lines = handler.readlines()
         with open(fName, 'w') as handler:
-            i = 0
+            if inter_f != None and not hasInter(signFile):
+                handler.write(inter_f)
+            for line in sign_lines:
+                handler.write(line)
             for index, line in enumerate(lines):
-                if index >= start and index <= end:
-                    if i < len(sign_lines):
-                        handler.write(sign_lines[i])
-                        i += 1
-                else:
-                    if i < len(sign_lines):
-                        for j in range(i, len(sign_lines)):
-                            handler.write(sign_lines[j])
-                        i = len(sign_lines)
+                if index > end:
                     handler.write(line)
 
 def signFiles(signfile, fName, recursive=False, force=False):
@@ -160,7 +186,7 @@ def removeSign(fName):
     start, end = getIndex(fName)
     with open(fName, 'w') as handler:
         for index in range(len(lines)):
-            if lines[index][:2] == '#!' and index < start:
+            if lines[index][:2] == constants.__inter__ and index < start:
                 continue
             if lines[index] == os.linesep and index < start:
                 continue
