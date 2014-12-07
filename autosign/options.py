@@ -16,20 +16,22 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Autosign python files quickly')
 
-    help = "The location of the signature template."
-    parser.add_argument('signfile', type=str, help=help)
-
-    help = "The target to be signed with the template."
-    parser.add_argument('target', type=str, help=help)
-
     help = "Current version of autosign"
     parser.add_argument('--version', '-v',  action='version', help=help, version=__desc__)
 
-    help = "For recursive signature addition. Defaults to True"
+    help = "For recursive operation. Defaults to False"
     parser.add_argument('--recursive', '-r',  action='store_true', help=help, dest='recursive')
 
+    sign_group = parser.add_argument_group('sign')
+
+    help = "The location of the signature template."
+    sign_group.add_argument('signfile', type=str, help=help)
+
+    help = "The target to be signed with the template."
+    sign_group.add_argument('target', type=str, help=help)
+
     help = "If signature of signed files should be replaced. Defaults to False"
-    parser.add_argument('--force', '-f',  action='store_true', help=help, dest='force')
+    sign_group.add_argument('--force', '-f',  action='store_true', help=help, dest='force')
 
     args = parser.parse_args()
 
