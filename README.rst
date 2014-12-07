@@ -24,7 +24,7 @@ Documentation
 
 Writing valid signature template
 --------------------------------
-A valid signature uses syntax very closely related to python comments. 
+A valid signature uses syntax very closely related to that of python comments. 
 
 * A signature should start and end with **'##'**.
 * Every line other than the start and end should start with **'#'**. 
