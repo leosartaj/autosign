@@ -15,18 +15,13 @@ try:
 except ImportError:
     from distutils.core import setup, find_packages
 
-def readFile(fName):
-    with open(fName) as f:
-        lines = f.read()
-    return lines
-
 setup(
     name = 'autosign',
     version = __version__,
     author = 'Sartaj Singh',
     author_email = 'singhsartaj94@gmail.com',
     description = ('Adds signature to your python files'),
-    long_description = readFile('README.rst'),
+    long_description = open('README.rst').read(),
     license = 'MIT',
     keywords = 'auto signature autosign',
     url = 'http://github.com/leosartaj/autosign',

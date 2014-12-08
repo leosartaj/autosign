@@ -6,13 +6,13 @@ Use under **caution**, work in progress.
 Installation
 ============
 autosign can be installed using pip
-::
+.. code-block::
   pip install autosign
 
 Uninstalling
 ============
 autosign can be uninstalled using pip
-::
+.. code-block::
   pip uninstall autosign
 
 Dependencies
@@ -36,9 +36,9 @@ Examples can be seen in examples directory. All the python files in this package
 Signing python files
 --------------------
 autosign can be used for signing python files
-::
+.. code-block::
   autosign signfile target [options]
 
 Run the following command, for various options.
-::
+.. code-block::
   autosign --help 
