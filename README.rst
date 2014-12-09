@@ -47,6 +47,16 @@ Run the following command, for various options.::
 
     autosign --help 
 
+Removing sign from python files
+-------------------------------
+autosign provides a utility, **remsign** for removing sign from signed python files::
+
+    remsign target [options]
+
+Run the following command, for various options.::
+
+    remsign --help 
+
 Bugs
 ====
 .. |issues| replace:: https://github.com/leosartaj/autosign/issues
