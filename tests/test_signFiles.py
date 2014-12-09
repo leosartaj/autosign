@@ -26,54 +26,36 @@ class TestsignFiles(unittest.TestCase):
 
     def test_signFiles_on_file(self):
         self.assertFalse(isSign(self.unsigned))
-        self.assertTrue(isSign(self.signed1))
-        signFiles(self.signfile, self.unsigned)
-        self.assertTrue(isSign(self.unsigned))
-        self.assertTrue(isSign(self.signed1))
+        for filename, val in signFiles(self.signfile, self.unsigned):
+            self.assertTrue(val)
 
     def test_signFiles_on_dir_not_recursive(self):
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
-        signFiles(self.signfile, self.testArea)
-        self.assertTrue(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
+        count = 0
+        for filename, val in signFiles(self.signfile, self.testArea):
+            if val:
+                count += 1
+        self.assertEqual(count, 1)
 
     def test_signFiles_on_dir_not_recursive_forced(self):
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
-        signFiles(self.signfile, self.testArea, False, True)
-        self.assertTrue(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
+        count = 0
+        for filename, val in signFiles(self.signfile, self.testArea, False, True):
+            if val:
+                count += 1
+        self.assertEqual(count, 2)
 
     def test_signFiles_on_dir_recursive(self):
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
-        signFiles(self.signfile, self.testArea, True)
-        self.assertTrue(isSign(self.unsigned1))
-        self.assertTrue(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
+        count = 0
+        for filename, val in signFiles(self.signfile, self.testArea, True):
+            if val:
+                count += 1
+        self.assertEqual(count, 2)
 
     def test_signFiles_on_dir_recursive_forced(self):
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
-        signFiles(self.signfile, self.testArea, True, True)
-        self.assertTrue(isSign(self.unsigned1))
-        self.assertTrue(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
+        count = 0
+        for filename, val in signFiles(self.signfile, self.testArea, True, True):
+            if val:
+                count += 1
+        self.assertEqual(count, 4)
 
     def tearDown(self):
         os.remove(self.unsigned)

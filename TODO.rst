@@ -12,3 +12,11 @@ Future Plans
 * Allow #!
 * addition of \n in signatures
 * initial docs
+
+1.1.0
+=====
+* basic configuration(py files only)
+
+1.2.0
+=====
+* basic configuration(for any file)

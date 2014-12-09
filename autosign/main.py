@@ -163,6 +163,7 @@ def sign(signFile, fName, force=False):
                 handler.write(line)
             for line in lines:
                 handler.write(line)
+        return True
     elif force:
         inter_f = removeInter(fName)
         start, end = getIndex(fName)
@@ -176,6 +177,8 @@ def sign(signFile, fName, force=False):
             for index, line in enumerate(lines):
                 if index > end:
                     handler.write(line)
+        return True
+    return False
 
 def signFiles(signfile, fName, recursive=False, force=False):
     """
@@ -184,14 +187,17 @@ def signFiles(signfile, fName, recursive=False, force=False):
     signs all the files in a directory
     """
     if os.path.isfile(fName) and isPy(fName):
-        sign(signfile, fName, force)
+        result = sign(signfile, fName, force)
+        yield fName, result
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
-                signFiles(signfile, path, recursive, force)
+                for filename, val in signFiles(signfile, path, recursive, force):
+                    yield filename, val
             elif os.path.isfile(path) and isPy(path):
-                sign(signfile, path, force)
+                result = sign(signfile, path, force)
+                yield path, result
 
 def removeSign(fName):
     """

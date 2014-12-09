@@ -17,6 +17,29 @@ import os
 import main
 from parse.autosign_options import parse_args
 
+def format_signfile(signfile):
+    """
+    formatting for signfile
+    """
+    msg = 'Signing using ' + signfile
+    return msg
+
+def format(filename):
+    """
+    Formats for verbose output
+    """
+    msg = filename + ' has been signed.'
+    return msg
+
+def gen_summary(signed, unsigned):
+    """
+    Generates the stats
+    """
+    stats = ''
+    stats += '\nTotal Scanned Files: ' + str(signed + unsigned)
+    stats += '\nSigned Files: ' + str(signed)
+    return stats
+
 if __name__ == '__main__':
     args = parse_args()
 
@@ -26,4 +49,18 @@ if __name__ == '__main__':
     target= args.target
     if not os.path.exists(target):
         raise IOError('file/dir \'%s\' does not exist.' %(target))
-    main.signFiles(signfile, target, args.recursive, args.force)
+
+    if args.verbose:
+        print format_signfile(signfile), '\n'
+
+    signed, unsigned = 0, 0
+    for filename, val in main.signFiles(signfile, target, args.recursive, args.force):
+        if val:
+            if args.verbose:
+                print format(filename)
+            signed += 1
+        else:
+            unsigned += 1
+
+    if args.verbose:
+        print gen_summary(signed, unsigned)

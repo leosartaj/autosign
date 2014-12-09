@@ -27,9 +27,6 @@ def parse_args():
     help = "The target on which data should be collected"
     parser.add_argument('target', type=str, help=help)
 
-    help = "For Verbose Output."
-    parser.add_argument('--verbose',  action='store_true', help=help, dest='verbose')
-
     help = "Complete Statistics"
     exclusive.add_argument('--complete', '-c',  action='store_true', help=help, dest='complete')
 

@@ -28,6 +28,9 @@ def gen_parent_parser():
     help = "Current version of autosign"
     parser.add_argument('--version', '-v',  action='version', help=help, version=__desc__)
 
+    help = "For Verbose Output."
+    parser.add_argument('--verbose',  action='store_true', help=help, dest='verbose')
+
     help = "For recursive operation. Defaults to False"
     parser.add_argument('--recursive', '-r',  action='store_true', help=help, dest='recursive')
 
