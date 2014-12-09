@@ -227,10 +227,13 @@ def removeSignFiles(fName, recursive=False):
     """
     if os.path.isfile(fName) and isSign(fName) and isPy(fName):
         removeSign(fName)
+        yield fName
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
-                removeSignFiles(path, recursive)
+                for filename in removeSignFiles(path, recursive):
+                    yield path
             elif os.path.isfile(path) and isSign(path) and isPy(path):
                 removeSign(path)
+                yield path

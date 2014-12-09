@@ -24,35 +24,29 @@ class TestsignFiles(unittest.TestCase):
 
     def test_removeSignFiles_on_signed_file(self):
         self.assertTrue(isSign(self.signed1))
-        removeSignFiles(self.signed1)
+        count = 0
+        for filename in removeSignFiles(self.signed1):
+            count += 1
+        self.assertEqual(count, 1)
         self.assertFalse(isSign(self.signed1))
 
     def test_removeSignFiles_on_unsigned_file(self):
-        self.assertFalse(isSign(self.unsigned1))
-        removeSignFiles(self.unsigned1)
-        self.assertFalse(isSign(self.unsigned1))
+        count = 0
+        for filename in removeSignFiles(self.unsigned1):
+            count += 1
+        self.assertEqual(count, 0)
 
     def test_removeSignFiles_on_dir_not_recursive(self):
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
-        removeSignFiles(self.testArea)
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertFalse(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
+        count = 0
+        for filename in removeSignFiles(self.testArea):
+            count += 1
+        self.assertEqual(count, 1)
 
     def test_signFiles_on_dir_recursive(self):
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertTrue(isSign(self.signed1))
-        self.assertTrue(isSign(self.signed2))
-        removeSignFiles(self.testArea, True)
-        self.assertFalse(isSign(self.unsigned1))
-        self.assertFalse(isSign(self.unsigned2))
-        self.assertFalse(isSign(self.signed1))
-        self.assertFalse(isSign(self.signed2))
+        count = 0
+        for filename in removeSignFiles(self.testArea, True):
+            count += 1
+        self.assertEqual(count, 2)
 
     def tearDown(self):
         shutil.rmtree(self.testArea)
