@@ -125,6 +125,21 @@ def checkTemplate(fName):
         return True
     return False
 
+def checkFiles(fName, recursive=False):
+    """
+    yields whether a file is signed or not
+    """
+    if os.path.isfile(fName) and isPy(fName):
+        yield fName, isSign(fName)
+    elif os.path.isdir(fName):
+        for filename in os.listdir(fName):
+            path = os.path.join(fName, filename)
+            if os.path.isdir(path) and recursive:
+                for filename, val in checkFiles(path, recursive):
+                    yield filename, val
+            elif os.path.isfile(path) and isPy(path):
+                yield path, isSign(path)
+
 def sign(signFile, fName, force=False):
     """
     Signs an unsigned file by default
