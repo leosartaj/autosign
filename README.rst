@@ -43,6 +43,7 @@ autosign can be used for signing python files::
 
     autosign signfile target [options]
 
+autosign signs python files only.
 Run the following command, for various options.::
 
     autosign --help 
@@ -53,6 +54,7 @@ autosign provides a utility, **remsign** for removing sign from signed python fi
 
     remsign target [options]
 
+remsign checks python files only.
 Run the following command, for various options.::
 
     remsign --help 
@@ -63,6 +65,7 @@ autosign provides a utility, **listsign** for collecting statistics::
 
     listsign target [options]
 
+listsign checks python files only.
 Run the following command, for various options.::
 
     listsign --help 
