@@ -36,8 +36,6 @@ def gen_summary(signed, unsigned, args):
     if args.verbose:
         stats += '\n'
     stats += 'Total Scanned Files: ' + str(signed + unsigned)
-    if not args.complete and not args.sign and not args.usign:
-        args.complete = True
     if args.complete or args.sign:
         stats += '\nSigned Files: ' + str(signed)
     if args.complete or args.usign:
@@ -50,6 +48,9 @@ if __name__ == '__main__':
     target = args.target
     if not os.path.exists(target):
         raise IOError('file/dir \'%s\' does not exist.' %(target))
+
+    if not args.complete and not args.sign and not args.usign:
+        args.complete = True
 
     signed, unsigned = 0, 0
     for filename, val in main.checkFiles(target, args.recursive):
