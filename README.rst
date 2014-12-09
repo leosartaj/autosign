@@ -57,6 +57,16 @@ Run the following command, for various options.::
 
     remsign --help 
 
+Checking a package
+------------------
+autosign provides a utility, **listsign** for collecting statistics::
+
+    listsign target [options]
+
+Run the following command, for various options.::
+
+    listsign --help 
+
 Bugs
 ====
 .. |issues| replace:: https://github.com/leosartaj/autosign/issues
