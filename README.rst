@@ -46,3 +46,9 @@ autosign can be used for signing python files::
 Run the following command, for various options.::
 
     autosign --help 
+
+Bugs
+====
+.. |issues| replace:: https://github.com/leosartaj/autosign/issues
+
+For filing bugs raise an issue at |issues|

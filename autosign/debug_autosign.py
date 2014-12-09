@@ -8,18 +8,17 @@
 # licensed under the mit license.
 ##
 
-
-
 """
-Main script that powers autosign
+For debugging purposes
+debugging version of autosign
 """
 
 import os
-from autosign import main
-from autosign.parse import autosign_options as options
+import main
+from parse.autosign_options import parse_args
 
 if __name__ == '__main__':
-    args = options.parse_args()
+    args = parse_args()
 
     signfile = args.signfile
     if not os.path.isfile(signfile):

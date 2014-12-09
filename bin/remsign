@@ -9,20 +9,17 @@
 ##
 
 """
-For debugging purposes
+Main script that powers autosign
 """
 
 import os
-import main
-from options import parse_args
+from autosign import main
+from autosign.parse import remsign_options as options
 
 if __name__ == '__main__':
-    args = parse_args()
+    args = options.parse_args()
 
-    signfile = args.signfile
-    if not os.path.isfile(signfile):
-        raise IOError('file \'%s\' does not exist.' %(signfile))
     target= args.target
     if not os.path.exists(target):
         raise IOError('file/dir \'%s\' does not exist.' %(target))
-    main.signFiles(signfile, target, args.recursive, args.force)
+    main.removeSignFiles(target, args.recursive)

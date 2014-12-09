@@ -181,10 +181,9 @@ def signFiles(signfile, fName, recursive=False, force=False):
 def removeSign(fName):
     """
     Removes sign from a signed file
+    does not remove shebang line
     does not remove extra lines that were added 
-    after the signature when the file was signed
-    removes line starting with a shebange that
-    may or may not have been added by the signature
+    after/before the signature when the file was signed
     raises UnsignedError if file not signed
     """
     if not isSign(fName):
@@ -196,10 +195,6 @@ def removeSign(fName):
     start, end = getIndex(fName)
     with open(fName, 'w') as handler:
         for index in range(len(lines)):
-            if lines[index][:2] == constants.__inter__ and index < start:
-                continue
-            if lines[index] == os.linesep and index < start:
-                continue
             if index < start or index > end:
                 handler.write(lines[index])
 
