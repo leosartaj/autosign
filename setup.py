@@ -26,7 +26,7 @@ setup(
     keywords = 'auto signature autosign',
     url = 'http://github.com/leosartaj/autosign',
     packages=find_packages(),
-    scripts=['bin/autosign', 'bin/remsign'],
+    scripts=['bin/autosign', 'bin/remsign', 'bin/listsign'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',

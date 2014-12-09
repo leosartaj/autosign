@@ -8,10 +8,8 @@
 # licensed under the mit license.
 ##
 
-
-
 """
-Main script that powers autosign
+script for running autosign utility of autosign
 """
 
 import os

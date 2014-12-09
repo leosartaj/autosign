@@ -9,15 +9,15 @@
 ##
 
 """
-Main script that powers autosign
+script for running remsign utility of autosign
 """
 
 import os
 from autosign import main
-from autosign.parse import remsign_options as options
+from autosign.parse import remsign_options
 
 if __name__ == '__main__':
-    args = options.parse_args()
+    args = remsign_options.parse_args()
 
     target= args.target
     if not os.path.exists(target):
