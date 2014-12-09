@@ -1,8 +1,6 @@
-*********
 Autosign
 *********
 Add your signature to your **python** files.
-Use under **caution**, work in progress.
 
 .. image:: https://travis-ci.org/leosartaj/autosign.svg
     :target: https://travis-ci.org/leosartaj/autosign
