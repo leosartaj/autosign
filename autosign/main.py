@@ -17,32 +17,32 @@ import exceptions
 Main functions
 """
 
-def getIndex(fName):
+def getIndex(fName, options):
     """
-        returns the start and end of a signature in a file
-    returns None if __sigstart__ or __sigend__ not found
+    returns the start and end of a signature in a file
+    returns None if no signature found
     """
     handler = open(fName)
 
     start, end = None, None
     for index, line in enumerate(handler):
-        if line[:2] == constants.__sigstart__ and start == None:
+        if line[:2] == options.start and start == None:
             start = index
-        elif line[:2] == constants.__sigend__ and end == None:
+        elif line[:2] == options.end and end == None:
             end = index
             break
-        elif line[0] != constants.__sigline__ and start != None:
+        elif line[0] != options.line and start != None:
             start, end = None, None
             break
     if start != None and end != None:
         return start, end
     return None, None
 
-def isSign(fName):
+def isSign(fName, options):
     """
     Checks if a file is already signed
     """
-    start, end = getIndex(fName)
+    start, end = getIndex(fName, options)
     if start != None and end != None:
         return True
     return False
@@ -56,31 +56,29 @@ def checkRe(exp, line):
         return True
     return False
 
-def hasInter(fName):
+def hasInter(fName, re):
     """
-    Checks if a file starts with a #! 
-    directing to use python interpreter
+    Checks if a file has a special line
     """ 
-    exp = re.compile('^#!.*python.*$')
+    exp = re.compile(re)
     with open(fName, 'r') as handler:
         lines = handler.readlines()
         if len(lines) and checkRe(exp, lines[0]):
             return True
     return False
 
-def removeInter(fName):
+def removeInter(fName, re):
     """
-    Checks if a file starts with a #! 
-    directing to use python interpreter
-    if it has removes and returns the line
+    Checks if a file has a line with the passed re
+    if it has removes and returns the first matched line
     else returns None
     """
     inter = None
-    if not hasInter(fName):
+    if not hasInter(fName, re):
         return inter
     with open(fName, 'r') as handler:
         lines = handler.readlines()
-    exp = re.compile('^#!.*python.*$')
+    exp = re.compile(re)
     with open(fName, 'w') as handler:
         for line in lines:
             if not checkRe(exp, line):
@@ -89,28 +87,29 @@ def removeInter(fName):
                 inter = line
     return inter
 
-def isPy(fName):
+def checkType(fName, ext='.py', re=None):
     """
-    checks if file is python or not
-    checks if file has .py extension
-    or checks if first line contains #!
-    and directs the use of python interpreter
+    checks if file is of a given type
+    checks if file has ext extension
+    or optionally checks if contains line matching re
     """
-    name, ext = os.path.splitext(fName)
-    if ext == '.py' or hasInter(fName):
+    name, extension = os.path.splitext(fName)
+    if extension == ext:
+        return True
+    if re and hasInter(fName, re):
         return True
 
     return False
 
-def checkTemplate(fName):
+def checkTemplate(fName, options):
     """
     checks if the file
     is a proper template or not
     file should only contain a single signature
-    before the signature line startin with #! is allowed
+    if allow option is set, allows allowed line
     extra lines are allowed before or after signature
     """
-    start, end = getIndex(fName)
+    start, end = getIndex(fName, options)
     if start == None or end == None:
         return False
     handler = open(fName, 'r')
@@ -129,7 +128,7 @@ def checkFiles(fName, recursive=False):
     """
     yields whether a file is signed or not
     """
-    if os.path.isfile(fName) and isPy(fName):
+    if os.path.isfile(fName) and checkType(fName):
         yield fName, isSign(fName)
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
@@ -137,7 +136,7 @@ def checkFiles(fName, recursive=False):
             if os.path.isdir(path) and recursive:
                 for filename, val in checkFiles(path, recursive):
                     yield filename, val
-            elif os.path.isfile(path) and isPy(path):
+            elif os.path.isfile(path) and checkType(path):
                 yield path, isSign(path)
 
 def sign(signFile, fName, force=False):
@@ -186,7 +185,7 @@ def signFiles(signfile, fName, recursive=False, force=False):
     signs a file
     signs all the files in a directory
     """
-    if os.path.isfile(fName) and isPy(fName):
+    if os.path.isfile(fName) and checkType(fName):
         result = sign(signfile, fName, force)
         yield fName, result
     elif os.path.isdir(fName):
@@ -195,7 +194,7 @@ def signFiles(signfile, fName, recursive=False, force=False):
             if os.path.isdir(path) and recursive:
                 for filename, val in signFiles(signfile, path, recursive, force):
                     yield filename, val
-            elif os.path.isfile(path) and isPy(path):
+            elif os.path.isfile(path) and checkType(path):
                 result = sign(signfile, path, force)
                 yield path, result
 
@@ -225,7 +224,7 @@ def removeSignFiles(fName, recursive=False):
     removes sign from a python file 
     removes signs from all the python files in a directory
     """
-    if os.path.isfile(fName) and isSign(fName) and isPy(fName):
+    if os.path.isfile(fName) and isSign(fName) and checkType(fName):
         removeSign(fName)
         yield fName
     elif os.path.isdir(fName):
@@ -234,6 +233,6 @@ def removeSignFiles(fName, recursive=False):
             if os.path.isdir(path) and recursive:
                 for filename in removeSignFiles(path, recursive):
                     yield path
-            elif os.path.isfile(path) and isSign(path) and isPy(path):
+            elif os.path.isfile(path) and isSign(path) and checkType(path):
                 removeSign(path)
                 yield path

@@ -18,3 +18,10 @@ __rc__ = '.signrc' # default rc name
 DEFAULT_OPTIONS = {'ext': '.py', 'start': '##', 'line': '#', 'end': '##', 'blank': 'True'}
 
 SPECIAL_OPTIONS = {'allow': '^#!.*python.*$'}
+
+class options:
+    """
+    Special class for storing options
+    """
+    def __init__(self, options_dic):
+        pass

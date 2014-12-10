@@ -9,6 +9,7 @@
 ##
 
 import shutil, os
+from autosign import config
 
 """
 Helper functions for performing tests
@@ -34,3 +35,9 @@ def testArea(obj):
     newFile(obj.unsigned2)
     obj.signed2 = os.path.join(obj.dire, 'testArea/testArea2/test_signedfile2.py')
     shutil.copy(obj.signfile, obj.signed2)
+
+def readrc(obj):
+    obj.signrc = os.path.join(obj.dire, 'testData/signrc')
+    parser = config.gen_parser(obj.signrc)
+    obj.options_py  = config.parse_section(parser, 'python')
+    obj.options_c  = config.parse_section(parser, 'c')

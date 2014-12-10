@@ -1,0 +1,14 @@
+[python]
+start = ##
+ext = .py
+end = ##
+line = #
+blank = True
+allow = ^#!.*python.*$
+
+[c]
+start = /*
+ext = .c
+end = */
+line = *
+blank = True

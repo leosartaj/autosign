@@ -10,22 +10,31 @@
 
 import unittest
 import os
+import helper
 from autosign.main import isSign
 
 class TestisSign(unittest.TestCase):
     """
     tests the isSign function in main module
     """
-    def test_signed_files(self):
-        dire = os.path.dirname(__file__)
-        path = os.path.join(dire, 'testData/signed')
+    def setUp(self):
+        self.dire = os.path.dirname(__file__)
+        helper.readrc(self)
+
+    def test_signed_files_py(self):
+        path = os.path.join(self.dire, 'testData/signed/py')
         for filename in os.listdir(path):
             fName = os.path.join(path, filename)
-            self.assertEqual(isSign(fName), True)
+            self.assertEqual(isSign(fName, self.options_py), True)
+
+    def test_signed_files_c(self):
+        path = os.path.join(self.dire, 'testData/signed/c')
+        for filename in os.listdir(path):
+            fName = os.path.join(path, filename)
+            self.assertEqual(isSign(fName, self.options_c), True)
 
     def test_unsigned_files(self):
-        dire = os.path.dirname(__file__)
-        path = os.path.join(dire, 'testData/unsigned')
+        path = os.path.join(self.dire, 'testData/unsigned')
         for filename in os.listdir(path):
             fName = os.path.join(path, filename)
-            self.assertEqual(isSign(fName), False)
+            self.assertEqual(isSign(fName, self.options_py), False)

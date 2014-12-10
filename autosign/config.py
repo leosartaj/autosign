@@ -17,6 +17,18 @@ from ConfigParser import SafeConfigParser
 import configOptions as co
 from configOptions import __rc__
 
+class optionsClass:
+    """
+    Special class for storing options
+    """
+    def __init__(self, options):
+        self.ext = options['ext']
+        self.start = options['start']
+        self.line = options['line']
+        self.end = options['end']
+        self.blank = options['blank']
+        self.allow = options['allow']
+
 def save_rc(parser, fName=__rc__):
     """
     saves a parser
@@ -71,15 +83,19 @@ def parse_section(parser, section):
             options[option] = default[option]
         elif not options[option]:
             options[option] = default[option]
-
+    special = co.SPECIAL_OPTIONS
+    for option in special:
+        if not option in options:
+            options[option] = None # be explicit
+    options = optionsClass(options) # wrap it in an object
     return options
 
 def parse_rc(rc=__rc__):
     """
     Parses a rc
-    returns a dictionary of dictionary
+    returns a dictionary of objects
     with each section as key
-    and value being a dictionary of options, value pairs
+    and value being a object having options as attributes
     """
     parser = gen_parser(rc)
     sections = {}
