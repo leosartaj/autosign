@@ -15,6 +15,7 @@ debugging version of autosign
 
 import os
 import main
+import config
 from parse.autosign_options import parse_args
 
 def format_signfile(signfile):
@@ -42,6 +43,15 @@ def gen_summary(signed, unsigned):
 
 if __name__ == '__main__':
     args = parse_args()
+    if args.signrc:
+        signrc = args.signrc
+        if not os.path.isfile(signrc):
+            raise IOError('file \'%s\' does not exist.' %(signrc))
+    else:
+        signrc = config.find_rc()
+    if not signrc: # hack for now
+        signrc = config.save_rc(config.gen_basic_rc())
+    print signrc
 
     signfile = args.signfile
     if not os.path.isfile(signfile):

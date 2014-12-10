@@ -21,9 +21,11 @@ def save_rc(parser, fName=__rc__):
     """
     saves a parser
     and the given path
+    returns the path
     """
     with open(fName, 'w') as handler:
         parser.write(handler)
+    return fName
 
 def gen_basic_rc():
     """
