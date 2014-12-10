@@ -23,13 +23,13 @@ def gen_parent_parser():
     """
     Parses the arguments
     """
-    parser = argparse.ArgumentParser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False, conflict_handler='resolve')
 
     help = "Current version of autosign"
     parser.add_argument('--version', '-v',  action='version', help=help, version=__desc__)
 
     help = "For Verbose Output."
-    parser.add_argument('--verbose',  action='store_true', help=help, dest='verbose')
+    parser.add_argument('--verbose', '-v',  action='store_true', help=help, dest='verbose')
 
     help = "For recursive operation. Defaults to False"
     parser.add_argument('--recursive', '-r',  action='store_true', help=help, dest='recursive')
