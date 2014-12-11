@@ -112,13 +112,18 @@ def checkTemplate(fName, options):
     start, end = getIndex(fName, options)
     if start == None or end == None:
         return False
+
+    exp = None
+    if options.allow:
+        exp = re.compile(options.allow)
+
     handler = open(fName, 'r')
     lines = handler.readlines()
     add = 0
     for index, line in enumerate(lines):
-        if line[:2] == constants.__inter__ and index < start:
+        if exp and checkRe(exp, line) and index < start:
             add += 1
-        elif line == os.linesep and (index < start or index > end):
+        elif options.blank and line == os.linesep and (index < start or index > end):
             add += 1
     if len(lines) - 1 == end - start + add:
         return True

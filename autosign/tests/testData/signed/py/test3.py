@@ -1,8 +1,5 @@
 #!/usr/bin/env python2
 
-"""
-Just a signed file
-"""
 
 ##
 # signature

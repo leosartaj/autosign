@@ -6,6 +6,3 @@
 # Licensed under the MIT license.
 ##
 
-"""
-Just a signed file
-"""
