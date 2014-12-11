@@ -19,6 +19,13 @@ import main
 import config
 from parse.listsign_options import parse_args
 
+def format_signrc(signrc):
+    """
+    formatting for signrc
+    """
+    msg =  'using ' + signrc + ' as rc'
+    return msg
+
 def format(filename, val):
     """
     Formats for verbose output
@@ -67,6 +74,9 @@ if __name__ == '__main__':
 
     if not args.complete and not args.sign and not args.usign:
         args.complete = True
+
+    if args.verbose:
+        print format_signrc(signrc), '\n'
 
     signed, unsigned = 0, 0
     for section in sections:

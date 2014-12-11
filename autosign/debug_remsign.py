@@ -19,6 +19,13 @@ import main
 import config
 from parse.remsign_options import parse_args
 
+def format_signrc(signrc):
+    """
+    formatting for signrc
+    """
+    msg =  'using ' + signrc + ' as rc'
+    return msg
+
 def format(filename):
     """
     Formats for verbose output
@@ -54,6 +61,9 @@ if __name__ == '__main__':
     target= args.target
     if not os.path.exists(target):
         raise IOError('file/dir \'%s\' does not exist.' %(target))
+
+    if args.verbose:
+        print format_signrc(signrc), '\n'
 
     count = 0
     for section in sections:

@@ -13,8 +13,17 @@ script for running autosign utility of autosign
 """
 
 import os
+import sys
 from autosign import main
+from autosign import config
 from autosign.parse import autosign_options
+
+def format_signrc(signrc):
+    """
+    formatting for signrc
+    """
+    msg =  'using ' + signrc + ' as rc'
+    return msg
 
 def format_signfile(signfile):
     """
@@ -42,6 +51,20 @@ def gen_summary(signed, unsigned):
 if __name__ == '__main__':
     args = autosign_options.parse_args()
 
+    if args.init:
+        signrc = config.save_rc(config.gen_basic_rc())
+    if args.signrc:
+        signrc = args.signrc
+        if not os.path.isfile(signrc):
+            raise IOError('file \'%s\' does not exist.' %(signrc))
+    else:
+        signrc = config.find_rc()
+    if not signrc: # hack for now
+        print 'No Signrc found. Exiting.'
+        sys.exit()
+
+    sections = config.parse_rc(signrc)
+
     signfile = args.signfile
     if not os.path.isfile(signfile):
         raise IOError('file \'%s\' does not exist.' %(signfile))
@@ -50,16 +73,19 @@ if __name__ == '__main__':
         raise IOError('file/dir \'%s\' does not exist.' %(target))
 
     if args.verbose:
+        print format_signrc(signrc), '\n'
         print format_signfile(signfile), '\n'
 
     signed, unsigned = 0, 0
-    for filename, val in main.signFiles(signfile, target, args.recursive, args.force):
-        if val:
-            if args.verbose:
-                print format(filename)
-            signed += 1
-        else:
-            unsigned += 1
+    for section in sections:
+        options = sections[section]
+        for filename, val in main.signFiles(signfile, target, options, args.recursive, args.force):
+            if val:
+                if args.verbose:
+                    print format(filename)
+                signed += 1
+            else:
+                unsigned += 1
 
     if args.verbose:
         print gen_summary(signed, unsigned)

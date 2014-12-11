@@ -19,6 +19,13 @@ import main
 import config
 from parse.autosign_options import parse_args
 
+def format_signrc(signrc):
+    """
+    formatting for signrc
+    """
+    msg =  'using ' + signrc + ' as rc'
+    return msg
+
 def format_signfile(signfile):
     """
     formatting for signfile
@@ -67,6 +74,7 @@ if __name__ == '__main__':
         raise IOError('file/dir \'%s\' does not exist.' %(target))
 
     if args.verbose:
+        print format_signrc(signrc), '\n'
         print format_signfile(signfile), '\n'
 
     signed, unsigned = 0, 0
