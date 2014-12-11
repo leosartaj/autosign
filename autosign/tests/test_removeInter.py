@@ -11,7 +11,7 @@
 import unittest
 import os, shutil
 import helper
-from autosign.main import removeInter, isPy
+from autosign.main import removeInter, checkType
 
 class TestcheckTemplate(unittest.TestCase):
     """
@@ -19,19 +19,21 @@ class TestcheckTemplate(unittest.TestCase):
     """
     def setUp(self):
         self.dire = os.path.dirname(__file__)
+        helper.readrc(self)
 
     def test_removeInter_not_hasInter(self):
         simplefile = os.path.join(self.dire, 'test_simplefile')
         helper.newFile(simplefile)
-        self.assertEqual(removeInter(simplefile), None)
+        self.assertEqual(removeInter(simplefile, self.options_py.allow), None)
         os.remove(simplefile)
 
     def test_removeInter_hasInter(self):
         pythonfile = os.path.join(self.dire, 'test_pythonfile')
         stored = os.path.join(self.dire, 'testData/pythonfile')
         shutil.copyfile(stored, pythonfile)
-        self.assertTrue(isPy(pythonfile))
-        removeInter(pythonfile)
-        self.assertFalse(isPy(pythonfile))
+        ext, re = self.options_py.ext, self.options_py.allow
+        self.assertTrue(checkType(pythonfile, ext, re))
+        removeInter(pythonfile, self.options_py.allow)
+        self.assertFalse(checkType(pythonfile, ext, re))
         os.remove(pythonfile)
 

@@ -56,29 +56,30 @@ def checkRe(exp, line):
         return True
     return False
 
-def hasInter(fName, re):
+def hasInter(fName, allow):
     """
     Checks if a file has a special line
+    matching allow
     """ 
-    exp = re.compile(re)
+    exp = re.compile(allow)
     with open(fName, 'r') as handler:
         lines = handler.readlines()
         if len(lines) and checkRe(exp, lines[0]):
             return True
     return False
 
-def removeInter(fName, re):
+def removeInter(fName, allow):
     """
     Checks if a file has a line with the passed re
     if it has removes and returns the first matched line
     else returns None
     """
     inter = None
-    if not hasInter(fName, re):
+    if not hasInter(fName, allow):
         return inter
     with open(fName, 'r') as handler:
         lines = handler.readlines()
-    exp = re.compile(re)
+    exp = re.compile(allow)
     with open(fName, 'w') as handler:
         for line in lines:
             if not checkRe(exp, line):
@@ -87,7 +88,7 @@ def removeInter(fName, re):
                 inter = line
     return inter
 
-def checkType(fName, ext='.py', re=None):
+def checkType(fName, ext='.py', allow=None):
     """
     checks if file is of a given type
     checks if file has ext extension
@@ -96,9 +97,8 @@ def checkType(fName, ext='.py', re=None):
     name, extension = os.path.splitext(fName)
     if extension == ext:
         return True
-    if re and hasInter(fName, re):
+    if allow and hasInter(fName, allow):
         return True
-
     return False
 
 def checkTemplate(fName, options):
