@@ -56,11 +56,13 @@ def checkRe(exp, line):
         return True
     return False
 
-def hasInter(fName, allow):
+def hasInter(fName, allow=None):
     """
     Checks if a file has a special line
     matching allow
     """ 
+    if not allow:
+        return False
     exp = re.compile(allow)
     with open(fName, 'r') as handler:
         lines = handler.readlines()
@@ -68,13 +70,15 @@ def hasInter(fName, allow):
             return True
     return False
 
-def removeInter(fName, allow):
+def removeInter(fName, allow=None):
     """
     Checks if a file has a line with the passed re
     if it has removes and returns the first matched line
     else returns None
     """
     inter = None
+    if not allow:
+        return inter
     if not hasInter(fName, allow):
         return inter
     with open(fName, 'r') as handler:
@@ -145,24 +149,25 @@ def checkFiles(fName, options, recursive=False):
             elif os.path.isfile(path) and checkType(path, ext, allow):
                 yield path, isSign(path, options)
 
-def sign(signFile, fName, force=False):
+def sign(signFile, fName, options, force=False):
     """
     Signs an unsigned file by default
     if force is True also replaces sign of signed files
     """
-    if not checkTemplate(signFile):
+    if not checkTemplate(signFile, options):
         raise exceptions.TemplateError('Incorrect Template')
 
     with open(signFile, 'r') as sign: # sign to be added
         sign_lines = sign.readlines()
         temp_len = len(sign_lines)
 
-    if not isSign(fName):
-        inter_f = removeInter(fName)
+    allow = options.allow
+    if not isSign(fName, options):
+        inter_f = removeInter(fName, allow)
         with open(fName, 'r') as handler:
             lines = handler.readlines()
         with open(fName, 'w') as handler:
-            if inter_f != None and not hasInter(signFile):
+            if inter_f != None and not hasInter(signFile, allow):
                 handler.write(inter_f)
             for line in sign_lines:
                 handler.write(line)
@@ -170,12 +175,12 @@ def sign(signFile, fName, force=False):
                 handler.write(line)
         return True
     elif force:
-        inter_f = removeInter(fName)
-        start, end = getIndex(fName)
+        inter_f = removeInter(fName, allow)
+        start, end = getIndex(fName, options)
         with open(fName, 'r') as handler:
             lines = handler.readlines()
         with open(fName, 'w') as handler:
-            if inter_f != None and not hasInter(signFile):
+            if inter_f != None and not hasInter(signFile, allow):
                 handler.write(inter_f)
             for line in sign_lines:
                 handler.write(line)
@@ -185,23 +190,24 @@ def sign(signFile, fName, force=False):
         return True
     return False
 
-def signFiles(signfile, fName, recursive=False, force=False):
+def signFiles(signfile, fName, options, recursive=False, force=False):
     """
     recursive implementation of main.sign
     signs a file
     signs all the files in a directory
     """
-    if os.path.isfile(fName) and checkType(fName):
-        result = sign(signfile, fName, force)
+    ext, allow = options.ext, options.allow
+    if os.path.isfile(fName) and checkType(fName, ext, allow):
+        result = sign(signfile, fName, options, force)
         yield fName, result
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
-                for filename, val in signFiles(signfile, path, recursive, force):
+                for filename, val in signFiles(signfile, path, options, recursive, force):
                     yield filename, val
-            elif os.path.isfile(path) and checkType(path):
-                result = sign(signfile, path, force)
+            elif os.path.isfile(path) and checkType(path, ext, allow):
+                result = sign(signfile, path, options, force)
                 yield path, result
 
 def removeSign(fName):

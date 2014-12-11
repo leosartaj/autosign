@@ -14,6 +14,7 @@ debugging version of autosign
 """
 
 import os
+import sys
 import main
 import config
 from parse.autosign_options import parse_args
@@ -43,6 +44,9 @@ def gen_summary(signed, unsigned):
 
 if __name__ == '__main__':
     args = parse_args()
+
+    if args.init:
+        signrc = config.save_rc(config.gen_basic_rc())
     if args.signrc:
         signrc = args.signrc
         if not os.path.isfile(signrc):
@@ -50,8 +54,10 @@ if __name__ == '__main__':
     else:
         signrc = config.find_rc()
     if not signrc: # hack for now
-        signrc = config.save_rc(config.gen_basic_rc())
-    print signrc
+        print 'No Signrc found. Exiting.'
+        sys.exit()
+
+    sections = config.parse_rc(signrc)
 
     signfile = args.signfile
     if not os.path.isfile(signfile):
@@ -64,13 +70,15 @@ if __name__ == '__main__':
         print format_signfile(signfile), '\n'
 
     signed, unsigned = 0, 0
-    for filename, val in main.signFiles(signfile, target, args.recursive, args.force):
-        if val:
-            if args.verbose:
-                print format(filename)
-            signed += 1
-        else:
-            unsigned += 1
+    for section in sections:
+        options = sections[section]
+        for filename, val in main.signFiles(signfile, target, options, args.recursive, args.force):
+            if val:
+                if args.verbose:
+                    print format(filename)
+                signed += 1
+            else:
+                unsigned += 1
 
     if args.verbose:
         print gen_summary(signed, unsigned)

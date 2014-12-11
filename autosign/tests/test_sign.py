@@ -31,37 +31,53 @@ class Testsign(unittest.TestCase):
 
         self.unsigned = os.path.join(self.dire, 'testData/test_unsignedfile.py')
         helper.newFile(self.unsigned)
+        helper.readrc(self)
 
     def test_incorrect_signfile(self):
         incorrect = os.path.join(self.dire, 'testData/unsigned')
         for filename in os.listdir(incorrect):
             path = os.path.join(incorrect, filename)
-            self.assertRaises(TemplateError, sign, path, self.unsigned)
+            self.assertRaises(TemplateError, sign, path, self.unsigned, self.options_py)
 
     def test_sign_on_unsigned_files(self):
         unsigned = self.unsigned
-        self.assertEqual(isSign(unsigned), False)
-        sign(self.signfile, unsigned)
-        self.assertEqual(isSign(unsigned), True)
+        self.assertEqual(isSign(unsigned, self.options_py), False)
+        sign(self.signfile, unsigned, self.options_py)
+        self.assertEqual(isSign(unsigned, self.options_py), True)
         os.remove(unsigned)
+
+    def test_sign_on_signed_files_ext_c(self):
+        cdir = os.path.join(self.dire, 'testData/signed/c')
+        cfile = os.path.join(self.dire, 'testData/signed/c/test1.c')
+        template = os.path.join(self.dire, 'test1.c')
+        path = os.path.join(self.dire, 'c')
+        shutil.copytree(cdir, path)
+        shutil.copy(cfile, template)
+        for filename in os.listdir(path):
+            fName  = os.path.join(path, filename)
+            self.assertEqual(isSign(fName, self.options_c), True)
+            sign(template, fName, self.options_c, True)
+            self.assertEqual(isSign(fName, self.options_c), True)
+        shutil.rmtree(path)
+        os.remove(template)
 
     def test_sign_on_signed_files_sign_same_length(self):
         signed = self.signed
-        self.assertEqual(isSign(signed), True)
-        sign(self.otherSignfile, signed, True)
-        self.assertEqual(isSign(signed), True)
+        self.assertEqual(isSign(signed, self.options_py), True)
+        sign(self.otherSignfile, signed, self.options_py, True)
+        self.assertEqual(isSign(signed, self.options_py), True)
 
     def test_sign_on_signed_files_sign_shorter_length(self):
         signed = self.signed
-        self.assertEqual(isSign(signed), True)
-        sign(self.shortSign, signed, True)
-        self.assertEqual(isSign(signed), True)
+        self.assertEqual(isSign(signed, self.options_py), True)
+        sign(self.shortSign, signed, self.options_py, True)
+        self.assertEqual(isSign(signed, self.options_py), True)
 
     def test_sign_on_signed_files_sign_longer_length(self):
         signed = self.signed
-        self.assertEqual(isSign(signed), True)
-        sign(self.longSign, signed, True)
-        self.assertEqual(isSign(signed), True)
+        self.assertEqual(isSign(signed, self.options_py), True)
+        sign(self.longSign, signed, self.options_py, True)
+        self.assertEqual(isSign(signed, self.options_py), True)
 
     def tearDown(self):
         os.remove(self.signed)
