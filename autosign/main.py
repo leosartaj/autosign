@@ -11,7 +11,7 @@
 import os
 import re
 import constants
-import exceptions
+import exce
 
 """
 Main functions
@@ -152,7 +152,7 @@ def sign(signFile, fName, options, force=False):
     if force is True also replaces sign of signed files
     """
     if not checkTemplate(signFile, options):
-        raise exceptions.TemplateError('Incorrect Template')
+        raise exce.TemplateError('Incorrect Template')
 
     with open(signFile, 'r') as sign: # sign to be added
         sign_lines = sign.readlines()
@@ -216,7 +216,7 @@ def removeSign(fName, options):
     raises UnsignedError if file not signed
     """
     if not isSign(fName, options):
-        raise exceptions.UnsignedError("File not signed")
+        raise exce.UnsignedError("File not signed")
 
     with open(fName, 'r') as handler:
         lines = handler.readlines()

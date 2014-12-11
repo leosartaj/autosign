@@ -12,7 +12,7 @@ import unittest
 import os, shutil
 import helper
 from autosign.main import removeSign, isSign
-from autosign.exceptions import UnsignedError
+from autosign.exce import UnsignedError
 
 class TestremoveSign(unittest.TestCase):
     """

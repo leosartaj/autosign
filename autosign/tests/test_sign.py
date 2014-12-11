@@ -12,7 +12,7 @@ import unittest
 import os, shutil
 import helper
 from autosign.main import sign, isSign
-from autosign.exceptions import TemplateError
+from autosign.exce import TemplateError
 
 class Testsign(unittest.TestCase):
     """

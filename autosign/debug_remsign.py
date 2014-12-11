@@ -14,7 +14,9 @@ debugging version of remsign
 """
 
 import os
+import sys
 import main
+import config
 from parse.remsign_options import parse_args
 
 def format(filename):
@@ -35,15 +37,31 @@ def gen_summary(count):
 if __name__ == '__main__':
     args = parse_args()
 
+    if args.init:
+        signrc = config.save_rc(config.gen_basic_rc())
+    if args.signrc:
+        signrc = args.signrc
+        if not os.path.isfile(signrc):
+            raise IOError('file \'%s\' does not exist.' %(signrc))
+    else:
+        signrc = config.find_rc()
+    if not signrc: # hack for now
+        print 'No Signrc found. Exiting.'
+        sys.exit()
+
+    sections = config.parse_rc(signrc)
+
     target= args.target
     if not os.path.exists(target):
         raise IOError('file/dir \'%s\' does not exist.' %(target))
 
     count = 0
-    for filename in main.removeSignFiles(target, args.recursive):
-        count += 1
-        if args.verbose:
-            print format(filename)
+    for section in sections:
+        options = sections[section]
+        for filename in main.removeSignFiles(target, options, args.recursive):
+            count += 1
+            if args.verbose:
+                print format(filename)
 
     if args.verbose:
         print gen_summary(count)
