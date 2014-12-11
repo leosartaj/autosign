@@ -129,20 +129,21 @@ def checkTemplate(fName, options):
         return True
     return False
 
-def checkFiles(fName, recursive=False):
+def checkFiles(fName, options, recursive=False):
     """
     yields whether a file is signed or not
     """
-    if os.path.isfile(fName) and checkType(fName):
-        yield fName, isSign(fName)
+    ext, allow = options.ext, options.allow
+    if os.path.isfile(fName) and checkType(fName, ext, allow):
+        yield fName, isSign(fName, options)
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
-                for filename, val in checkFiles(path, recursive):
+                for filename, val in checkFiles(path, options, recursive):
                     yield filename, val
-            elif os.path.isfile(path) and checkType(path):
-                yield path, isSign(path)
+            elif os.path.isfile(path) and checkType(path, ext, allow):
+                yield path, isSign(path, options)
 
 def sign(signFile, fName, force=False):
     """

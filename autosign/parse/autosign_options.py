@@ -33,9 +33,6 @@ def parse_args():
     help = "If signature of signed files should be replaced. Defaults to False"
     sign_group.add_argument('--force', '-f',  action='store_true', help=help, dest='force')
 
-    help = "Location of signrc."
-    sign_group.add_argument('--signrc', help=help, default=None, dest='signrc')
-
     args = parser.parse_args()
 
     return args

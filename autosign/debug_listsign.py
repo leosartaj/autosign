@@ -14,7 +14,9 @@ debugging version of listsign
 """
 
 import os
+import sys
 import main
+import config
 from parse.listsign_options import parse_args
 
 def format(filename, val):
@@ -45,6 +47,20 @@ def gen_summary(signed, unsigned, args):
 if __name__ == '__main__':
     args = parse_args()
 
+    if args.init:
+        signrc = config.save_rc(config.gen_basic_rc())
+    if args.signrc:
+        signrc = args.signrc
+        if not os.path.isfile(signrc):
+            raise IOError('file \'%s\' does not exist.' %(signrc))
+    else:
+        signrc = config.find_rc()
+    if not signrc: # hack for now
+        print 'No Signrc found. Exiting.'
+        sys.exit()
+
+    sections = config.parse_rc(signrc)
+
     target = args.target
     if not os.path.exists(target):
         raise IOError('file/dir \'%s\' does not exist.' %(target))
@@ -53,13 +69,15 @@ if __name__ == '__main__':
         args.complete = True
 
     signed, unsigned = 0, 0
-    for filename, val in main.checkFiles(target, args.recursive):
-        if val:
-            if args.verbose and (args.sign or args.complete):
-                print format(filename, val)
-            signed += 1
-        else:
-            if args.verbose and (args.usign or args.complete):
-                print format(filename, val)
-            unsigned += 1
+    for section in sections:
+        options = sections[section]
+        for filename, val in main.checkFiles(target, options, args.recursive):
+            if val:
+                if args.verbose and (args.sign or args.complete):
+                    print format(filename, val)
+                signed += 1
+            else:
+                if args.verbose and (args.usign or args.complete):
+                    print format(filename, val)
+                unsigned += 1
     print gen_summary(signed, unsigned, args)

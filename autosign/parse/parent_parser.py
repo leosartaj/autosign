@@ -34,4 +34,10 @@ def gen_parent_parser():
     help = "For recursive operation. Defaults to False"
     parser.add_argument('--recursive', '-r',  action='store_true', help=help, dest='recursive')
 
+    help = "Generate a basic rc."
+    parser.add_argument('--init', action='store_true', help=help, dest='init')
+
+    help = "Location of signrc."
+    parser.add_argument('--signrc', help=help, default=None, dest='signrc')
+
     return parser
