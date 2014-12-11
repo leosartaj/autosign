@@ -23,36 +23,37 @@ class TestsignFiles(unittest.TestCase):
         self.unsigned = os.path.join(self.dire, 'testData/test_unsignedfile.py')
         helper.newFile(self.unsigned)
         helper.testArea(self)
+        helper.readrc(self)
 
     def test_signFiles_on_file(self):
-        self.assertFalse(isSign(self.unsigned))
-        for filename, val in signFiles(self.signfile, self.unsigned):
+        self.assertFalse(isSign(self.unsigned, self.options_py))
+        for filename, val in signFiles(self.signfile, self.unsigned, self.options_py):
             self.assertTrue(val)
 
     def test_signFiles_on_dir_not_recursive(self):
         count = 0
-        for filename, val in signFiles(self.signfile, self.testArea):
+        for filename, val in signFiles(self.signfile, self.testArea, self.options_py):
             if val:
                 count += 1
         self.assertEqual(count, 1)
 
     def test_signFiles_on_dir_not_recursive_forced(self):
         count = 0
-        for filename, val in signFiles(self.signfile, self.testArea, False, True):
+        for filename, val in signFiles(self.signfile, self.testArea, self.options_py, False, True):
             if val:
                 count += 1
         self.assertEqual(count, 2)
 
     def test_signFiles_on_dir_recursive(self):
         count = 0
-        for filename, val in signFiles(self.signfile, self.testArea, True):
+        for filename, val in signFiles(self.signfile, self.testArea, self.options_py, True):
             if val:
                 count += 1
         self.assertEqual(count, 2)
 
     def test_signFiles_on_dir_recursive_forced(self):
         count = 0
-        for filename, val in signFiles(self.signfile, self.testArea, True, True):
+        for filename, val in signFiles(self.signfile, self.testArea, self.options_py, True, True):
             if val:
                 count += 1
         self.assertEqual(count, 4)
