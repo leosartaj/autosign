@@ -21,19 +21,20 @@ class TestcheckTemplate(unittest.TestCase):
         self.dire = os.path.dirname(__file__)
         self.signfile = os.path.join(self.dire, 'testData/dummySign.py')
         helper.testArea(self)
+        helper.readrc(self)
 
     def test_checkFiles_not_recursive(self):
         count = 0
-        for filename, val in checkFiles(self.testArea):
+        for filename, val in checkFiles(self.testArea, self.options_py):
             count += 1
-            self.assertEqual(isSign(filename), val)
+            self.assertEqual(isSign(filename, self.options_py), val)
         self.assertEqual(count, 2)
 
     def test_checkFiles_recursive(self):
         count = 0
-        for filename, val in checkFiles(self.testArea, True):
+        for filename, val in checkFiles(self.testArea, self.options_py, True):
             count += 1
-            self.assertEqual(isSign(filename), val)
+            self.assertEqual(isSign(filename, self.options_py), val)
         self.assertEqual(count, 4)
 
     def tearDown(self):

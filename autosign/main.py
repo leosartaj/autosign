@@ -92,16 +92,13 @@ def removeInter(fName, allow=None):
                 inter = line
     return inter
 
-def checkType(fName, ext='.py', allow=None):
+def checkType(fName, ext='.py'):
     """
     checks if file is of a given type
     checks if file has ext extension
-    or optionally checks if contains line matching re
     """
     name, extension = os.path.splitext(fName)
     if extension == ext:
-        return True
-    if allow and hasInter(fName, allow):
         return True
     return False
 
@@ -137,8 +134,8 @@ def checkFiles(fName, options, recursive=False):
     """
     yields whether a file is signed or not
     """
-    ext, allow = options.ext, options.allow
-    if os.path.isfile(fName) and checkType(fName, ext, allow):
+    ext = options.ext
+    if os.path.isfile(fName) and checkType(fName, ext):
         yield fName, isSign(fName, options)
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
@@ -146,7 +143,7 @@ def checkFiles(fName, options, recursive=False):
             if os.path.isdir(path) and recursive:
                 for filename, val in checkFiles(path, options, recursive):
                     yield filename, val
-            elif os.path.isfile(path) and checkType(path, ext, allow):
+            elif os.path.isfile(path) and checkType(path, ext):
                 yield path, isSign(path, options)
 
 def sign(signFile, fName, options, force=False):
@@ -196,8 +193,8 @@ def signFiles(signfile, fName, options, recursive=False, force=False):
     signs a file
     signs all the files in a directory
     """
-    ext, allow = options.ext, options.allow
-    if os.path.isfile(fName) and checkType(fName, ext, allow):
+    ext = options.ext
+    if os.path.isfile(fName) and checkType(fName, ext):
         result = sign(signfile, fName, options, force)
         yield fName, result
     elif os.path.isdir(fName):
@@ -206,11 +203,11 @@ def signFiles(signfile, fName, options, recursive=False, force=False):
             if os.path.isdir(path) and recursive:
                 for filename, val in signFiles(signfile, path, options, recursive, force):
                     yield filename, val
-            elif os.path.isfile(path) and checkType(path, ext, allow):
+            elif os.path.isfile(path) and checkType(path, ext):
                 result = sign(signfile, path, options, force)
                 yield path, result
 
-def removeSign(fName):
+def removeSign(fName, options):
     """
     Removes sign from a signed file
     does not remove shebang line
@@ -218,33 +215,34 @@ def removeSign(fName):
     after/before the signature when the file was signed
     raises UnsignedError if file not signed
     """
-    if not isSign(fName):
+    if not isSign(fName, options):
         raise exceptions.UnsignedError("File not signed")
 
     with open(fName, 'r') as handler:
         lines = handler.readlines()
 
-    start, end = getIndex(fName)
+    start, end = getIndex(fName, options)
     with open(fName, 'w') as handler:
         for index in range(len(lines)):
             if index < start or index > end:
                 handler.write(lines[index])
 
-def removeSignFiles(fName, recursive=False):
+def removeSignFiles(fName, options, recursive=False):
     """
     recursive implementation of main.removeSign
     removes sign from a python file 
     removes signs from all the python files in a directory
     """
-    if os.path.isfile(fName) and isSign(fName) and checkType(fName):
-        removeSign(fName)
+    ext = options.ext
+    if os.path.isfile(fName) and isSign(fName, options) and checkType(fName, ext):
+        removeSign(fName, options)
         yield fName
     elif os.path.isdir(fName):
         for filename in os.listdir(fName):
             path = os.path.join(fName, filename)
             if os.path.isdir(path) and recursive:
-                for filename in removeSignFiles(path, recursive):
+                for filename in removeSignFiles(path, options, recursive):
                     yield path
-            elif os.path.isfile(path) and isSign(path) and checkType(path):
-                removeSign(path)
+            elif os.path.isfile(path) and isSign(path, options) and checkType(path, ext):
+                removeSign(path, options)
                 yield path

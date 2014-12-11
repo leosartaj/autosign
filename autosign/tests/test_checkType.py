@@ -24,27 +24,27 @@ class TestcheckTemplate(unittest.TestCase):
     def test_checkType_not_python_file(self):
         simplefile = os.path.join(self.dire, 'test_simplefile')
         helper.newFile(simplefile)
-        ext, re = self.options_py.ext, self.options_py.allow
-        self.assertFalse(checkType(simplefile, ext, re))
+        ext = self.options_py.ext
+        self.assertFalse(checkType(simplefile, ext))
         os.remove(simplefile)
 
     def test_checkType_python_file(self):
         pythonfile = os.path.join(self.dire, 'test_pythonfile.py')
         helper.newFile(pythonfile)
-        ext, re = self.options_py.ext, self.options_py.allow
-        self.assertTrue(checkType(pythonfile, ext, re))
+        ext = self.options_py.ext
+        self.assertTrue(checkType(pythonfile, ext))
         os.remove(pythonfile)
 
     def test_checkType_python_file_no_ext(self):
         pythonfile = os.path.join(self.dire, 'test_pythonfile')
         stored = os.path.join(self.dire, 'testData/pythonfile')
         shutil.copyfile(stored, pythonfile)
-        ext, re = self.options_py.ext, self.options_py.allow
-        self.assertTrue(checkType(pythonfile, ext, re))
+        ext = self.options_py.ext
+        self.assertFalse(checkType(pythonfile, ext))
         os.remove(pythonfile)
 
     def test_checkType_c_file(self):
         path = os.path.join(self.dire, 'testData/signed/c')
-        ext, re = self.options_c.ext, None
+        ext = self.options_c.ext
         for filename in os.listdir(path):
-            self.assertTrue(checkType(filename, ext, re))
+            self.assertTrue(checkType(filename, ext))

@@ -28,12 +28,11 @@ class TestcheckTemplate(unittest.TestCase):
         os.remove(simplefile)
 
     def test_removeInter_hasInter(self):
-        pythonfile = os.path.join(self.dire, 'test_pythonfile')
+        pythonfile = os.path.join(self.dire, 'test_pythonfile.py')
         stored = os.path.join(self.dire, 'testData/pythonfile')
         shutil.copyfile(stored, pythonfile)
-        ext, re = self.options_py.ext, self.options_py.allow
-        self.assertTrue(checkType(pythonfile, ext, re))
-        removeInter(pythonfile, self.options_py.allow)
-        self.assertFalse(checkType(pythonfile, ext, re))
+        ext = self.options_py.ext
+        self.assertTrue(checkType(pythonfile, ext))
+        self.assertNotEqual(removeInter(pythonfile, self.options_py.allow), None)
         os.remove(pythonfile)
 

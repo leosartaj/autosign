@@ -19,20 +19,21 @@ class TestremoveSign(unittest.TestCase):
     tests the removeSign function in main module
     """
     def setUp(self):
-        dire = os.path.dirname(__file__)
-        self.signedfile = os.path.join(dire, 'testData/toBeSigned.py')
-        self.signed = os.path.join(dire, 'testData/test_signedfile.py')
+        self.dire = os.path.dirname(__file__)
+        self.signedfile = os.path.join(self.dire, 'testData/toBeSigned.py')
+        self.signed = os.path.join(self.dire, 'testData/test_signedfile.py')
         shutil.copyfile(self.signedfile, self.signed)
-        self.unsigned = os.path.join(dire, 'testData/test_unsignedfile.py')
+        self.unsigned = os.path.join(self.dire, 'testData/test_unsignedfile.py')
         helper.newFile(self.unsigned)
+        helper.readrc(self)
 
     def test_remove_from_unsigned_file(self):
-        self.assertRaises(UnsignedError, removeSign, self.unsigned)
+        self.assertRaises(UnsignedError, removeSign, self.unsigned, self.options_py)
 
     def test_remove_from_signed_file(self):
-        self.assertTrue(isSign(self.signed))
-        removeSign(self.signed)
-        self.assertFalse(isSign(self.signed))
+        self.assertTrue(isSign(self.signed, self.options_py))
+        removeSign(self.signed, self.options_py)
+        self.assertFalse(isSign(self.signed, self.options_py))
 
     def tearDown(self):
         os.remove(self.unsigned)
