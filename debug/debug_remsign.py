@@ -15,9 +15,9 @@ debugging version of remsign
 
 import os
 import sys
-import main
-import config
-from parse.remsign_options import parse_args
+import autosign.main as main
+import autosign.config as config
+from autosign.parse.remsign_options import parse_args
 
 def format_signrc(signrc):
     """

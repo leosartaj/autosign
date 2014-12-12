@@ -14,8 +14,8 @@ script for running remsign utility of autosign
 
 import os
 import sys
-from autosign import main
-from autosign import config
+import autosign.main as main
+import autosign.config as config
 from autosign.parse import remsign_options
 
 def format_signrc(signrc):

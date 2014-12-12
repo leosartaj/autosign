@@ -10,7 +10,6 @@
 
 import os
 import re
-import constants
 import exce
 
 """

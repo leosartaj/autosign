@@ -14,8 +14,8 @@ script for running listsign utility of autosign
 
 import os
 import sys
-from autosign import main
-from autosign import config
+import autosign.main as main
+import autosign.config as config
 from autosign.parse import listsign_options
 
 def format_signrc(signrc):

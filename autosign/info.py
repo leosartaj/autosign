@@ -9,9 +9,9 @@
 ##
 
 """
-Various constants fro defining sign
+Information module
 """
-__sigstart__ = '##'
-__sigline__  = '#'
-__sigend__   = '##'
-__inter__    = '#!'
+
+__version__ = '1.0.0'
+__desc__ = 'autosign  ' + __version__
+

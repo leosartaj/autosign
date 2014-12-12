@@ -14,8 +14,13 @@ Helper functions for configuration file
 
 import os
 from ConfigParser import SafeConfigParser
-import configOptions as co
-from configOptions import __rc__
+
+__rc__ = '.signrc' # default rc name
+
+# defult options for a section
+DEFAULT_OPTIONS = {'ext': '.py', 'start': '##', 'line': '#', 'end': '##', 'blank': 'True'}
+
+SPECIAL_OPTIONS = {'allow': '^#!.*python.*$'}
 
 class optionsClass:
     """
@@ -49,10 +54,10 @@ def gen_basic_rc():
 
     sec = 'python'
     parser.add_section(sec)
-    default = co.DEFAULT_OPTIONS
+    default = DEFAULT_OPTIONS
     for option in default:
         parser.set(sec, option, default[option])
-    special = co.SPECIAL_OPTIONS
+    special = SPECIAL_OPTIONS
     for option in special:
         parser.set(sec, option, special[option])
 
@@ -77,13 +82,13 @@ def parse_section(parser, section):
     for name, value in parser.items(section):
         options[name] = value
 
-    default = co.DEFAULT_OPTIONS
+    default = DEFAULT_OPTIONS
     for option in default:
         if not option in options:
             options[option] = default[option]
         elif not options[option]:
             options[option] = default[option]
-    special = co.SPECIAL_OPTIONS
+    special = SPECIAL_OPTIONS
     for option in special:
         if not option in options:
             options[option] = None # be explicit

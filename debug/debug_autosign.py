@@ -10,14 +10,14 @@
 
 """
 For debugging purposes
-debugging version of listsign
+debugging version of autosign
 """
 
 import os
 import sys
-import main
-import config
-from parse.listsign_options import parse_args
+import autosign.main as main
+import autosign.config as config
+from autosign.parse.autosign_options import parse_args
 
 def format_signrc(signrc):
     """
@@ -26,29 +26,27 @@ def format_signrc(signrc):
     msg =  'using ' + signrc + ' as rc'
     return msg
 
-def format(filename, val):
+def format_signfile(signfile):
+    """
+    formatting for signfile
+    """
+    msg = 'Signing using ' + signfile
+    return msg
+
+def format(filename):
     """
     Formats for verbose output
     """
-    if val:
-        result = 'signed'
-    else:
-        result = 'not signed'
-    msg = filename + ' is ' + result
+    msg = filename + ' has been signed.'
     return msg
 
-def gen_summary(signed, unsigned, args):
+def gen_summary(signed, unsigned):
     """
     Generates the stats
     """
     stats = ''
-    if args.verbose:
-        stats += '\n'
-    stats += 'Total Scanned Files: ' + str(signed + unsigned)
-    if args.complete or args.sign:
-        stats += '\nSigned Files: ' + str(signed)
-    if args.complete or args.usign:
-        stats += '\nUnsigned Files: ' + str(unsigned)
+    stats += '\nTotal Scanned Files: ' + str(signed + unsigned)
+    stats += '\nSigned Files: ' + str(signed)
     return stats
 
 if __name__ == '__main__':
@@ -68,26 +66,27 @@ if __name__ == '__main__':
 
     sections = config.parse_rc(signrc)
 
-    target = args.target
+    signfile = args.signfile
+    if not os.path.isfile(signfile):
+        raise IOError('file \'%s\' does not exist.' %(signfile))
+    target= args.target
     if not os.path.exists(target):
         raise IOError('file/dir \'%s\' does not exist.' %(target))
 
-    if not args.complete and not args.sign and not args.usign:
-        args.complete = True
-
     if args.verbose:
         print format_signrc(signrc), '\n'
+        print format_signfile(signfile), '\n'
 
     signed, unsigned = 0, 0
     for section in sections:
         options = sections[section]
-        for filename, val in main.checkFiles(target, options, args.recursive):
+        for filename, val in main.signFiles(signfile, target, options, args.recursive, args.force):
             if val:
-                if args.verbose and (args.sign or args.complete):
-                    print format(filename, val)
+                if args.verbose:
+                    print format(filename)
                 signed += 1
             else:
-                if args.verbose and (args.usign or args.complete):
-                    print format(filename, val)
                 unsigned += 1
-    print gen_summary(signed, unsigned, args)
+
+    if args.verbose:
+        print gen_summary(signed, unsigned)
