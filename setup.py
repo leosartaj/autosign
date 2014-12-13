@@ -20,7 +20,7 @@ setup(
     version = __version__,
     author = 'Sartaj Singh',
     author_email = 'singhsartaj94@gmail.com',
-    description = ('Adds signature to your python files'),
+    description = ('Adds signature to your files'),
     long_description = open('README.rst').read() + '\n\n' + open('CHANGELOG.rst').read(),
     license = 'MIT',
     keywords = 'auto signature autosign',
