@@ -15,9 +15,9 @@ Modifying the code
 Submitting pull requests
 ------------------------
 1. Fork and clone the repo.
-2. Create a new branch from develop branch, please don't work in your *master* branch directly.
+2. Create a new branch, please don't work in your *master* branch directly.
 #. Add new tests.
 #. Implement a feature.
 #. Run to check if things work. Repeat, until things get working.
 #. Update the documentation to reflect any changes.
-#. Push to your fork and submit a pull request to merge with *develop* branch.
+#. Push to your fork and submit a pull request.
