@@ -1,6 +1,6 @@
 Autosign
 *********
-Add your signature to your **python** files.
+Add your signature to your files.
 
 .. image:: https://travis-ci.org/leosartaj/autosign.svg
     :target: https://travis-ci.org/leosartaj/autosign
@@ -24,25 +24,23 @@ autosign is based on Python 2.7.
 Documentation
 =============
 
-Signing python files
---------------------
-autosign can be used for signing python files::
+Signing files
+--------------
+autosign can be used for signing files::
 
     autosign signfile target [options]
 
-autosign signs python files only.
-Run the following command, for various options.::
+Run the following command, for various options::
 
     autosign --help 
 
-Removing sign from python files
--------------------------------
-autosign provides a utility, **remsign** for removing sign from signed python files::
+Removing sign from files
+------------------------
+autosign provides a utility, **remsign** for removing sign from signed files::
 
     remsign target [options]
 
-remsign checks python files only.
-Run the following command, for various options.::
+Run the following command, for various options::
 
     remsign --help 
 
@@ -52,8 +50,7 @@ autosign provides a utility, **listsign** for collecting statistics::
 
     listsign target [options]
 
-listsign checks python files only.
-Run the following command, for various options.::
+Run the following command, for various options::
 
     listsign --help 
 
