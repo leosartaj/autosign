@@ -24,17 +24,6 @@ autosign is based on Python 2.7.
 Documentation
 =============
 
-Writing valid signature template
---------------------------------
-A valid signature uses syntax very closely related to that of python comments. 
-
-* A signature should start and end with **'##'**.
-* Every line other than the start and end should start with **'#'**. 
-* Blank lines are allowed before and after starting a signature. 
-* Line starting with **'#!'** is allowed before starting a signature. 
-  
-Examples can be seen in examples directory. All the python files in this package have been signed using 'examples/template1.txt'.
-
 Signing python files
 --------------------
 autosign can be used for signing python files::
@@ -67,6 +56,22 @@ listsign checks python files only.
 Run the following command, for various options.::
 
     listsign --help 
+
+Signrc
+------
+Autosign utilizes signrc to sign, remove and list signed/un-signed files. The meaning of options is as follows.
+
+* **ext** tells the utilities to look for files with only that extension
+* **Start** defines the starting character sequence of a signature
+* **line** defines the character sequence with whice every line(except start and end) should start of a valid signature
+* **end** defines the ending character sequence of a signature
+* **blank** (boolean) allows/forbids usage of blank line before start or after end of a signature
+* **allow** defines a special regular expression. Matching to which a line can be allowed before the start of a signature.
+  
+Examples can be seen in examples directory. All the python files in this package have been signed using **examples/templates/template1.txt** using **examples/signrc/signrc_py**.
+
+* --init option can be used for generating a very basic signrc
+* All the utilities look for **.signrc** first in cwd, then in home directory by default.
 
 Bugs
 ====
