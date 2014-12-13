@@ -1,0 +1,7 @@
+[c]
+ext = .c
+start = /*
+line = *
+end = */
+blank = True
+
