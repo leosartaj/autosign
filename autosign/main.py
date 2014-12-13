@@ -23,14 +23,17 @@ def getIndex(fName, options):
     """
     handler = open(fName)
 
+    opt_start, opt_end, opt_line = options.start, options.end, options.line
+    ls, le, ll = len(opt_start), len(opt_end), len(opt_line)
+
     start, end = None, None
     for index, line in enumerate(handler):
-        if line[:2] == options.start and start == None:
+        if line[:ls] == opt_start and start == None:
             start = index
-        elif line[:2] == options.end and end == None:
+        elif line[:le] == opt_end and end == None:
             end = index
             break
-        elif line[0] != options.line and start != None:
+        elif line[:ll] != opt_line and start != None:
             start, end = None, None
             break
     if start != None and end != None:
